@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<!-- saved from url=(0056)file:///C:/Users/francisco.rocha/Desktop/SorteadorA.html -->
+<html lang="pt-BR"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sorteio de Nomes</title>
+    <link href="./Sorteio de Nomes_files/css2" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-image: url('https://www.canoas.rs.gov.br/wp-content/uploads/2023/09/Vinicius-Thormann-12-768x512-1.jpg'); /* Substitua pela URL da sua imagem de fundo */
+            background-size: cover;
+            background-position: center;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            min-height: 100vh;
+            color: #fff;
+        }
+        .overlay {
+            background-color: rgba(0, 0, 0, 0.6);
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 90%;
+            width: 500px;
+            box-sizing: border-box;
+        }
+        h1 {
+            font-size: 36px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        textarea {
+            width: 100%;
+            height: 150px;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            margin-bottom: 10px;
+            font-family: 'Roboto', sans-serif;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #resultado {
+            margin-top: 20px;
+            font-size: 18px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        #contador {
+            margin-top: 10px;
+            font-size: 32px;
+            color: #ff6347;
+            text-align: center;
+        }
+        #linkCompartilhar {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #ff6347;
+            text-align: center;
+            word-break: break-word;
+        }
+        ol {
+            text-align: left;
+            padding-left: 20px;
+        }
+        @media (max-width: 600px) {
+            .overlay {
+                padding: 15px;
+                width: 100%;
+            }
+            h1 {
+                font-size: 20px;
+            }
+            button {
+                font-size: 14px;
+                padding: 8px 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Secretaria Municipal de Esporte e Lazer</h1>
+    <div class="overlay">
+        <h2>Sorteio de Cedências de Equipamentos Públicos de Esporte</h2>
+        <p>Insira uma lista de nomes, um por linha:</p>
+        <textarea id="nomes" placeholder="Ex: João
+Maria
+José"></textarea><br>
+        <button onclick="iniciarSorteio()">Sortear</button>
+
+        <div id="resultado"></div>
+        <div id="contador"></div>
+        <div id="linkCompartilhar"></div>
+    </div>
+
+    <script>
+        function iniciarSorteio() {
+            let contador = 5;
+            const contadorDiv = document.getElementById("contador");
+            contadorDiv.innerHTML = "Sorteio em " + contador;
+
+            const intervalo = setInterval(() => {
+                contador--;
+                contadorDiv.innerHTML = "Sorteio em " + contador;
+                if (contador <= 0) {
+                    clearInterval(intervalo);
+                    sortear();
+                }
+            }, 1000);
+        }
+
+        function sortear() {
+            // Pegar a lista de nomes
+            const textarea = document.getElementById("nomes");
+            const listaNomes = textarea.value.split('\n').filter(nome => nome.trim() !== '');
+
+            // Gerar um número aleatório para cada nome
+            const listaComNumeros = listaNomes.map(nome => ({
+                nome: nome.trim(),
+                numero: Math.random()
+            }));
+
+            // Ordenar a lista baseada nos números aleatórios
+            listaComNumeros.sort((a, b) => a.numero - b.numero);
+
+            // Selecionar os primeiros 9 nomes
+            const listaOrdenada = listaComNumeros.slice(0, 9).map(item => item.nome);
+
+            // Registrar a data e hora do sorteio
+            const dataSorteio = new Date();
+            const dataFormatada = dataSorteio.toLocaleString('pt-BR', {
+                day: '2-digit', month: '2-digit', year: 'numeric',
+                hour: '2-digit', minute: '2-digit', second: '2-digit'
+            });
+
+            // Exibir o resultado
+            const resultadoDiv = document.getElementById("resultado");
+            resultadoDiv.innerHTML = "<h2>Resultado do Sorteio:</h2><ol>" + 
+                listaOrdenada.map(nome => "<li>" + nome + "</li>").join('') + 
+                "</ol><p>Sorteio realizado em: " + dataFormatada + "</p>";
+
+            // Gerar o link para compartilhamento
+            const linkBase = window.location.href.split('?')[0]; // Base do link (URL sem query string)
+            const nomesCodificados = encodeURIComponent(listaOrdenada.join(','));
+            const linkCompartilhar = `${linkBase}?resultado=${nomesCodificados}`;
+            document.getElementById("linkCompartilhar").innerHTML = `<p><a href="${linkCompartilhar}" target="_blank">Clique aqui para compartilhar o resultado</a></p>`;
+        }
+
+        // Verificar se existe um resultado compartilhado na URL
+        function verificarResultadoCompartilhado() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const resultado = urlParams.get('resultado');
+            if (resultado) {
+                const nomes = decodeURIComponent(resultado).split(',');
+                const resultadoDiv = document.getElementById("resultado");
+                resultadoDiv.innerHTML = "<h2>Resultado do Sorteio:</h2><ol>" + 
+                    nomes.map(nome => "<li>" + nome + "</li>").join('') + 
+                    "</ol>";
+                document.getElementById("contador").innerHTML = "";
+                document.getElementById("linkCompartilhar").innerHTML = ""; // Ocultar o link de compartilhamento
+            }
+        }
+
+        // Executar ao carregar a página
+        window.onload = verificarResultadoCompartilhado;
+    </script>
+
+
+</body></html>
