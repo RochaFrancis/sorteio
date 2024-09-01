@@ -8,32 +8,45 @@
     <style>
         body {
             font-family: 'Roboto', sans-serif;
-            background-image: url('https://www.canoas.rs.gov.br/wp-content/uploads/2023/09/Vinicius-Thormann-12-768x512-1.jpg');
-            background-size: cover;
-            background-position: center;
+            background-color: #f4f4f4;
             margin: 0;
             padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            min-height: 100vh;
-            color: #fff;
+            color: #333;
         }
-        .overlay {
-            background-color: rgba(0, 0, 0, 0.6);
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
             padding: 20px;
-            border-radius: 10px;
-            max-width: 90%;
-            width: 500px;
-            box-sizing: border-box;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 1; /* Garante que o container esteja acima do relógio */
         }
-        h1 {
-            font-size: 36px;
+        .header, .footer {
             text-align: center;
+            border-bottom: 2px solid #007BFF;
+            padding-bottom: 10px;
             margin-bottom: 20px;
         }
-        textarea, #localHorario {
+        .footer {
+            border-top: 2px solid #007BFF;
+            padding-top: 10px;
+            margin-top: 20px;
+            font-size: 12px;
+        }
+        .header h1 {
+            font-size: 24px;
+            margin: 0;
+        }
+        .header h2 {
+            font-size: 18px;
+            margin: 5px 0 0 0;
+        }
+        .content {
+            text-align: left;
+            line-height: 1.6;
+        }
+        #nomes, #localHorario {
             width: 100%;
             padding: 10px;
             border-radius: 5px;
@@ -42,6 +55,9 @@
             font-family: 'Roboto', sans-serif;
             font-size: 16px;
             box-sizing: border-box;
+        }
+        textarea#nomes {
+            height: 150px;
         }
         button {
             background-color: #007BFF;
@@ -60,8 +76,6 @@
         #resultado {
             margin-top: 20px;
             font-size: 18px;
-            max-height: 300px;
-            overflow-y: auto;
         }
         #contador {
             margin-top: 10px;
@@ -74,55 +88,62 @@
             padding-left: 20px;
         }
         #relogio {
-            position: absolute;
+            position: fixed; /* Altera para fixed para garantir que o relógio fique visível */
             top: 10px;
             right: 10px;
-            font-size: 20px;
-            background-color: rgba(0, 0, 0, 0.5);
-            padding: 5px 10px;
+            font-size: 16px;
+            color: #555;
+            z-index: 2; /* Garante que o relógio fique acima de outros elementos */
+            background: rgba(255, 255, 255, 0.8); /* Adiciona fundo branco semi-transparente para garantir legibilidade */
+            padding: 5px;
             border-radius: 5px;
         }
+        .sorteio-input {
+            margin-bottom: 20px;
+        }
         @media print {
-            #nomes, #localHorario, #botaoSorteio, #botaoImprimir {
+            #nomes, #localHorario, #botaoSorteio, #botaoImprimir, #relogio, .sorteio-input, #contador {
                 display: none;
             }
-            #relogio {
-                position: static;
-                margin-bottom: 10px;
+            .container {
+                box-shadow: none;
             }
-        }
-        @media (max-width: 600px) {
-            .overlay {
-                padding: 15px;
-                width: 100%;
-            }
-            h1 {
-                font-size: 20px;
-            }
-            button {
-                font-size: 14px;
-                padding: 8px 16px;
+            body {
+                background-color: #fff;
             }
         }
     </style>
 </head>
 <body>
     <div id="relogio"></div>
+    <div class="container">
+        <div class="header">
+            <h1>Prefeitura Municipal de Canoas</h1>
+            <h2>Secretaria Municipal de Esporte e Lazer</h2>
+        </div>
 
-    <h1>Secretaria Municipal de Esporte e Lazer</h1>
-    <div class="overlay">
-        <h2>Sorteio de Nomes</h2>
-        <p>Insira uma lista de nomes, um por linha:</p>
-        <textarea id="nomes" placeholder="Ex: João&#10;Maria&#10;José"></textarea><br>
+        <div class="content">
+            <div class="sorteio-input">
+                <h3>Sorteio de Cedências de Espaços Públicos de Esportes</h3>
+                <p>Insira uma lista de nomes, um por linha:</p>
+                <textarea id="nomes" placeholder="Ex: João&#10;Maria&#10;José"></textarea><br>
 
-        <p>Digite o local e horário:</p>
-        <input type="text" id="localHorario" placeholder="Ex: Estação Cidadania - Domingo - 19 h - 20 h"><br>
+                <p>Insira o local e horário para Cedência:</p>
+                <input type="text" id="localHorario" placeholder="Ex: Estação Cidadania - Domingo - 19 h - 20 h"><br>
 
-        <button id="botaoSorteio" onclick="iniciarSorteio()">Sortear</button>
-        <button id="botaoImprimir" onclick="window.print()">Imprimir</button>
+                <button id="botaoSorteio" onclick="iniciarSorteio()">Sortear</button>
+                <button id="botaoImprimir" onclick="window.print()">Imprimir</button>
+            </div>
 
-        <div id="resultado"></div>
-        <div id="contador"></div>
+            <div id="resultado"></div>
+            <div id="contador"></div>
+        </div>
+
+        <div class="footer">
+            <p>Secretaria Municipal de Esporte e Lazer - Canoas</p>
+            <p>Endereço: Rua Quinze de Janeiro, 193, Centro - Canoas/RS</p>
+            <p>Telefone: (51) 3236.1909 | Email: francisco.rocha@canoas.rs.gov.br</p>
+        </div>
     </div>
 
     <script>
@@ -136,6 +157,7 @@
                 contadorDiv.innerHTML = "Sorteio em " + contador;
                 if (contador <= 0) {
                     clearInterval(intervalo);
+                    contadorDiv.innerHTML = ''; // Esconde o contador após o sorteio
                     sortear();
                 }
             }, 1000);
@@ -165,7 +187,7 @@
             const resultadoDiv = document.getElementById("resultado");
             resultadoDiv.innerHTML = `<h2>Resultado do Sorteio:</h2>
                 <ol>${listaOrdenada.map(nome => `<li>${nome}</li>`).join('')}</ol>
-                <p>Local e Horário: ${localHorario}</p>
+                <p>Local e Horário de Cedência: ${localHorario}</p>
                 <p>Sorteio realizado em: ${dataFormatada}</p>`;
         }
 
