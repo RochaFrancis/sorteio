@@ -97,6 +97,7 @@
             background: rgba(255, 255, 255, 0.8); /* Adiciona fundo branco semi-transparente para garantir legibilidade */
             padding: 5px;
             border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.3); /* Adiciona sombra para melhor destaque */
         }
         .sorteio-input {
             margin-bottom: 20px;
@@ -124,11 +125,11 @@
 
         <div class="content">
             <div class="sorteio-input">
-                <h3>Sorteio de Cedências de Espaços Públicos de Esportes</h3>
+                <h3>Sorteio de Cedências de Espaços Públicos Esportivos</h3>
                 <p>Insira uma lista de nomes, um por linha:</p>
                 <textarea id="nomes" placeholder="Ex: João&#10;Maria&#10;José"></textarea><br>
 
-                <p>Insira o local e horário para Cedência:</p>
+                <p>Insira o local e horário do espaço a ser cedido:</p>
                 <input type="text" id="localHorario" placeholder="Ex: Estação Cidadania - Domingo - 19 h - 20 h"><br>
 
                 <button id="botaoSorteio" onclick="iniciarSorteio()">Sortear</button>
@@ -187,7 +188,7 @@
             const resultadoDiv = document.getElementById("resultado");
             resultadoDiv.innerHTML = `<h2>Resultado do Sorteio:</h2>
                 <ol>${listaOrdenada.map(nome => `<li>${nome}</li>`).join('')}</ol>
-                <p>Local e Horário de Cedência: ${localHorario}</p>
+                <p>Local e Horário: ${localHorario}</p>
                 <p>Sorteio realizado em: ${dataFormatada}</p>`;
         }
 
