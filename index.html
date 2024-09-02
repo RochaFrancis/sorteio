@@ -166,34 +166,33 @@
             }, 1000);
         }
 
-        function sortear() {
-            const textarea = document.getElementById("nomes");
-            const listaNomes = textarea.value.split('\n').filter(nome => nome.trim() !== '');
+     function sortear() {
+    const textarea = document.getElementById("nomes");
+    const listaNomes = textarea.value.split('\n').filter(nome => nome.trim() !== '');
 
-            const listaComNumeros = listaNomes.map(nome => ({
-                nome: nome.trim(),
-                numero: Math.random()
-            }));
+    const listaComNumeros = listaNomes.map(nome => ({
+        nome: nome.trim(),
+        numero: Math.random()
+    }));
 
-            listaComNumeros.sort((a, b) => a.numero - b.numero);
+    listaComNumeros.sort((a, b) => a.numero - b.numero);
 
-            const listaOrdenada = listaComNumeros.slice(0, 9).map(item => item.nome);
+    const listaOrdenada = listaComNumeros.slice(0, 9).map(item => item.nome);
 
-            const dataSorteio = new Date();
-            const dataFormatada = dataSorteio.toLocaleString('pt-BR', {
-                day: '2-digit', month: '2-digit', year: 'numeric',
-                hour: '2-digit', minute: '2-digit', second: '2-digit'
-            });
+    const dataSorteio = new Date();
+    const dataFormatada = dataSorteio.toLocaleString('pt-BR', {
+        day: '2-digit', month: '2-digit', year: 'numeric',
+        hour: '2-digit', minute: '2-digit', second: '2-digit'
+    });
 
-            const localHorario = document.getElementById("localHorario").value;
+    const localHorario = document.getElementById("localHorario").value;
 
-            const resultadoDiv = document.getElementById("resultado");
-            resultadoDiv.innerHTML = `<h2>Resultado do Sorteio:</h2>
-                <ol>${listaOrdenada.map(nome => `<li>${nome}</li>`).join('')}</ol>
-                <p>Local e Horário para cedência: ${localHorario}</p>
-                <p>Sorteio realizado em: ${dataFormatada}</p>`;
-        }
-
+    const resultadoDiv = document.getElementById("resultado");
+    resultadoDiv.innerHTML = `<h2>Resultado do Sorteio:</h2>
+        <p>Local e Horário: ${localHorario}</p>
+        <ol>${listaOrdenada.map(nome => `<li>${nome}</li>`).join('')}</ol>
+        <p>Sorteio realizado em: ${dataFormatada}</p>`;
+}
         function atualizarRelogio() {
             const agora = new Date();
             const data = agora.toLocaleDateString('pt-BR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
